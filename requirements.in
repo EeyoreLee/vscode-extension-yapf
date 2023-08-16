@@ -11,5 +11,6 @@
 # Required packages
 pygls
 packaging
+yapf
 
 # TODO: Add your tool here
