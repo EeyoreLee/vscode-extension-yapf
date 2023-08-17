@@ -1,8 +1,8 @@
 {
     "name": "yapf",
     "displayName": "yapf",
-    "description": "Linting support for python files using `yapf`.",
-    "version": "0.1.1",
+    "description": "Formatter support for python files using `yapf`.",
+    "version": "0.1.2",
     "preview": true,
     "serverInfo": {
         "name": "yapf",
