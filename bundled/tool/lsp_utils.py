@@ -67,8 +67,12 @@ class CustomIO(io.TextIOWrapper):
     name = None
 
     def __init__(self, name, encoding="utf-8", newline=None):
+        raw = io.RawIOBase()
+        raw.readall = self._raw_readall
+        raw.write = self.write
         self._buffer = io.BytesIO()
         self._buffer.name = name
+        self._buffer.raw = raw
         super().__init__(self._buffer, encoding=encoding, newline=newline)
 
     def close(self):
@@ -80,6 +84,12 @@ class CustomIO(io.TextIOWrapper):
         self.seek(0)
         return self.read()
 
+    def _raw_readall(self) -> bytes:
+        self.seek(0)
+        return self.read().encode("utf-8")
+
+    def write(self, s) -> None:
+        self.buffer.write(s)
 
 @contextlib.contextmanager
 def substitute_attr(obj: Any, attribute: str, new_value: Any):
@@ -121,7 +131,7 @@ def _run_module(
                     if use_stdin and source is not None:
                         str_input = CustomIO("<stdin>", encoding="utf-8", newline="\n")
                         with redirect_io("stdin", str_input):
-                            str_input.write(source)
+                            str_input.write(source.encode("utf-8"))
                             str_input.seek(0)
                             runpy.run_module(module, run_name="__main__")
                     else:
