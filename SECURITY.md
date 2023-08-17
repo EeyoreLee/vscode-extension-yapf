@@ -1,13 +1,3 @@
-# TODO: The maintainer of this repo has not yet edited this file
-
-**Repo Owner** Make sure you update this. As a repository owner you will need to decide how you want to handle reporting of security issues for your project.
-
----
-
-** Content below this line is the Security information for the template itself **
-
-<!-- BEGIN MICROSOFT SECURITY.MD V0.0.7 BLOCK -->
-
 ## Security
 
 Microsoft takes the security of our software products and services seriously, which includes all source code repositories managed through our GitHub organizations, which include [Microsoft](https://github.com/Microsoft), [Azure](https://github.com/Azure), [DotNet](https://github.com/dotnet), [AspNet](https://github.com/aspnet), [Xamarin](https://github.com/xamarin), and [our GitHub organizations](https://opensource.microsoft.com/).
@@ -45,5 +35,3 @@ We prefer all communications to be in English.
 ## Policy
 
 Microsoft follows the principle of [Coordinated Vulnerability Disclosure](https://aka.ms/opensource/security/cvd).
-
-<!-- END MICROSOFT SECURITY.MD BLOCK -->
