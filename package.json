@@ -8,7 +8,7 @@
         "name": "yapf",
         "module": "yapf"
     },
-    "publisher": "22683d33-98ea-66f9-961d-cfe6a56b0234",
+    "publisher": "eeyore",
     "license": "MIT",
     "homepage": "https://github.com/EeyoreLee/vscode-extension-yapf",
     "repository": {
