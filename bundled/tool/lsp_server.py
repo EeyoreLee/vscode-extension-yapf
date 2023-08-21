@@ -312,6 +312,7 @@ def _run_tool_on_document(
                     cwd=cwd,
                     source=document.source,
                 )
+                ...
             except Exception:
                 log_error(traceback.format_exc(chain=True))
                 raise
