@@ -67,12 +67,8 @@ class CustomIO(io.TextIOWrapper):
     name = None
 
     def __init__(self, name, encoding="utf-8", newline=None):
-        raw = io.RawIOBase()
-        raw.readall = self._raw_readall
-        raw.write = self.write
         self._buffer = io.BytesIO()
         self._buffer.name = name
-        self._buffer.raw = raw
         super().__init__(self._buffer, encoding=encoding, newline=newline)
 
     def close(self):
@@ -84,12 +80,6 @@ class CustomIO(io.TextIOWrapper):
         self.seek(0)
         return self.read()
 
-    def _raw_readall(self) -> bytes:
-        self.seek(0)
-        return self.read().encode("utf-8")
-
-    def write(self, s) -> None:
-        self.buffer.write(s)
 
 class YapfIO(io.TextIOWrapper):
 
