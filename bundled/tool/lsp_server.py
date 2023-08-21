@@ -57,6 +57,20 @@ TOOL_DISPLAY = "yapf"
 
 TOOL_ARGS = []  # default arguments always passed to your tool.
 
+@LSP_SERVER.feature(lsp.TEXT_DOCUMENT_RANGE_FORMATTING)
+def range_formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | None:
+    document = LSP_SERVER.workspace.get_document(params.text_document.uri)
+    start = params.range.start.line
+    end = params.range.end.line + 1
+    extra_args = ["-l", f"{start}-{end}"]
+    edits = _formatting_helper(document, extra_args=extra_args)
+    if edits:
+        return edits
+
+    # NOTE: If you provide [] array, VS Code will clear the file of all contents.
+    # To indicate no changes to file return None.
+    return None
+
 
 @LSP_SERVER.feature(lsp.TEXT_DOCUMENT_FORMATTING)
 def formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | None:
@@ -64,7 +78,6 @@ def formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | Non
     # If your tool is a formatter you can use this handler to provide
     # formatting support on save. You have to return an array of lsp.TextEdit
     # objects, to provide your formatted results.
-    print("in fotmatting func")
     document = LSP_SERVER.workspace.get_document(params.text_document.uri)
     edits = _formatting_helper(document)
     if edits:
@@ -75,8 +88,8 @@ def formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | Non
     return None
 
 
-def _formatting_helper(document: workspace.Document) -> list[lsp.TextEdit] | None:
-    result = _run_tool_on_document(document, use_stdin=True)
+def _formatting_helper(document: workspace.Document, extra_args: Optional[Sequence[str]] = None) -> list[lsp.TextEdit] | None:
+    result = _run_tool_on_document(document, use_stdin=True, extra_args=extra_args)
     if result.stdout:
         new_source = _match_line_endings(document, result.stdout)
         return [
@@ -222,13 +235,15 @@ def _get_settings_by_document(document: workspace.Document | None):
 def _run_tool_on_document(
     document: workspace.Document,
     use_stdin: bool = False,
-    extra_args: Sequence[str] = [],
+    extra_args: Optional[Sequence[str]] = None,
 ) -> utils.RunResult | None:
     """Runs tool on the given document.
 
     if use_stdin is true then contents of the document is passed to the
     tool via stdin.
     """
+    if extra_args is None:
+        extra_args = []
     if str(document.uri).startswith("vscode-notebook-cell"):
         # Skip notebook cells
         return None
