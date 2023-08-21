@@ -67,6 +67,25 @@ class CustomIO(io.TextIOWrapper):
     name = None
 
     def __init__(self, name, encoding="utf-8", newline=None):
+        self._buffer = io.BytesIO()
+        self._buffer.name = name
+        super().__init__(self._buffer, encoding=encoding, newline=newline)
+
+    def close(self):
+        """Provide this close method which is used by some tools."""
+        # This is intentionally empty.
+
+    def get_value(self) -> str:
+        """Returns value from the buffer as string."""
+        self.seek(0)
+        return self.read()
+
+
+class YapfIO(io.TextIOWrapper):
+
+    name = None
+
+    def __init__(self, name, encoding="utf-8", newline=None):
         raw = io.RawIOBase()
         raw.readall = self._raw_readall
         raw.write = self.write
@@ -129,7 +148,7 @@ def _run_module(
             with redirect_io("stdout", str_output):
                 with redirect_io("stderr", str_error):
                     if use_stdin and source is not None:
-                        str_input = CustomIO("<stdin>", encoding="utf-8", newline="\n")
+                        str_input = YapfIO("<stdin>", encoding="utf-8", newline="\n")
                         with redirect_io("stdin", str_input):
                             str_input.write(source.encode("utf-8"))
                             str_input.seek(0)
