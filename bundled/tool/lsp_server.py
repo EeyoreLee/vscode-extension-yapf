@@ -60,7 +60,7 @@ TOOL_ARGS = []  # default arguments always passed to your tool.
 @LSP_SERVER.feature(lsp.TEXT_DOCUMENT_RANGE_FORMATTING)
 def range_formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | None:
     document = LSP_SERVER.workspace.get_document(params.text_document.uri)
-    start = params.range.start.line
+    start = params.range.start.line + 1
     end = params.range.end.line + 1
     extra_args = ["-l", f"{start}-{end}"]
     edits = _formatting_helper(document, extra_args=extra_args)
