@@ -84,7 +84,7 @@
                     "type": "array"
                 },
                 "yapf.importStrategy": {
-                    "default": "fromEnvironment",
+                    "default": "useBundled",
                     "description": "Defines where `yapf` is imported from. This setting may be ignored if `yapf.path` is set.",
                     "enum": [
                         "useBundled",
