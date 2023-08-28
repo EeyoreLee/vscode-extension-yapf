@@ -2,7 +2,7 @@
     "name": "yapf",
     "displayName": "yapf",
     "description": "Formatter support for python files using `yapf`.",
-    "version": "0.1.5",
+    "version": "0.1.7",
     "preview": true,
     "serverInfo": {
         "name": "yapf",
@@ -135,7 +135,7 @@
         ]
     },
     "dependencies": {
-        "@vscode/python-extension": "1.0.1",
+        "@vscode/python-extension": "^1.0.4",
         "fs-extra": "^11.1.1",
         "vscode-languageclient": "^8.1.0"
     },
@@ -144,14 +144,14 @@
         "@types/vscode": "1.78.0",
         "@types/glob": "^8.1.0",
         "@types/node": "16.x",
-        "@typescript-eslint/eslint-plugin": "^6.2.0",
-        "@typescript-eslint/parser": "^6.4.0",
+        "@typescript-eslint/eslint-plugin": "^6.4.1",
+        "@typescript-eslint/parser": "^6.4.1",
         "@vscode/test-electron": "^2.3.4",
         "@vscode/vsce": "^2.20.1",
         "eslint": "^8.47.0",
         "glob": "^10.3.3",
         "prettier": "^3.0.2",
-        "typescript": "^5.1.6",
+        "typescript": "^5.2.2",
         "ts-loader": "^9.4.4",
         "webpack": "^5.88.2",
         "webpack-cli": "^5.1.4"

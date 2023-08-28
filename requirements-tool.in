@@ -1,4 +1,4 @@
-# This file is used to generate requirements.txt.
+# This file is used to generate requirements-tool.txt.
 # NOTE:
 # Use Python 3.7 or greater which ever is the minimum version of the python
 # you plan on supporting when creating the environment or using pip-tools.
@@ -9,7 +9,4 @@
 # run the above commands manually.
 
 # Required packages
-pygls
-packaging
-
-# TODO: Add your tool here
+yapf
