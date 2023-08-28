@@ -52,6 +52,8 @@ def _check_files(names: List[str]) -> None:
 
 def _update_pip_packages(session: nox.Session) -> None:
     session.run("pip-compile", "--generate-hashes", "--resolver=backtracking", "--upgrade", "./requirements.in")
+    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking",
+                "--upgrade", "./requirements-tool.in")
     session.run(
         "pip-compile",
         "--generate-hashes",
@@ -89,10 +91,8 @@ def _update_npm_packages(session: nox.Session) -> None:
             package_json["devDependencies"][package] = latest
 
     # Ensure engine matches the package
-    if (
-        package_json["engines"]["vscode"]
-        != package_json["devDependencies"]["@types/vscode"]
-    ):
+    if (package_json["engines"]["vscode"]
+            != package_json["devDependencies"]["@types/vscode"]):
         print(
             "Please check VS Code engine version and @types/vscode version in package.json."
         )
@@ -107,8 +107,10 @@ def _update_npm_packages(session: nox.Session) -> None:
 
 def _setup_template_environment(session: nox.Session) -> None:
     session.install("wheel", "pip-tools")
-    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking", "--upgrade", "./requirements.in")
-    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking", "--upgrade", "./requirements-tool.in")
+    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking",
+                "--upgrade", "./requirements.in")
+    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking",
+                "--upgrade", "./requirements-tool.in")
     session.run(
         "pip-compile",
         "--generate-hashes",

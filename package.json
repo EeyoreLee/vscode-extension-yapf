@@ -123,6 +123,15 @@
                     ],
                     "scope": "machine",
                     "type": "string"
+                },
+                "yapf.showDebugLog": {
+                    "default": false,
+                    "description": "Whether to output debug log",
+                    "scope": "resource",
+                    "type": "boolean",
+                    "tags": [
+                        "experimental"
+                    ]
                 }
             }
         },
