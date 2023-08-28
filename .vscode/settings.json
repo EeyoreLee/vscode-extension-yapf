@@ -19,4 +19,9 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true
     },
+    "[python]": {
+        "editor.formatOnSaveMode": "modifications",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "eeyore.yapf"
+    },
 }

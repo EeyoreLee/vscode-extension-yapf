@@ -13,6 +13,7 @@ export interface ISettings {
     interpreter: string[];
     importStrategy: string;
     showNotifications: string;
+    showDebugLog: boolean;
 }
 
 export function getExtensionSettings(namespace: string, includeInterpreter?: boolean): Promise<ISettings[]> {
@@ -69,6 +70,7 @@ export async function getWorkspaceSettings(
         interpreter: resolveVariables(interpreter, workspace),
         importStrategy: config.get<string>(`importStrategy`) ?? 'fromEnvironment',
         showNotifications: config.get<string>(`showNotifications`) ?? 'off',
+        showDebugLog: config.get<boolean>(`showDebugLog`) ?? false
     };
     return workspaceSetting;
 }
@@ -97,6 +99,7 @@ export async function getGlobalSettings(namespace: string, includeInterpreter?: 
         interpreter: interpreter,
         importStrategy: getGlobalValue<string>(config, 'importStrategy', 'fromEnvironment'),
         showNotifications: getGlobalValue<string>(config, 'showNotifications', 'off'),
+        showDebugLog: getGlobalValue<boolean>(config, 'showDebugLog', false)
     };
     return setting;
 }
@@ -108,6 +111,7 @@ export function checkIfConfigurationChanged(e: ConfigurationChangeEvent, namespa
         `${namespace}.interpreter`,
         `${namespace}.importStrategy`,
         `${namespace}.showNotifications`,
+        `${namespace}.showDebugLog`,
     ];
     const changed = settings.map((s) => e.affectsConfiguration(s));
     return changed.includes(true);

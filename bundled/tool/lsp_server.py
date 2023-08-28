@@ -165,6 +165,7 @@ def _get_global_defaults():
         "args": GLOBAL_SETTINGS.get("args", []),
         "importStrategy": GLOBAL_SETTINGS.get("importStrategy", "useBundled"),
         "showNotifications": GLOBAL_SETTINGS.get("showNotifications", "off"),
+        "showDebugLog": GLOBAL_SETTINGS.get("showDebugLog", False),
     }
 
 
@@ -267,9 +268,7 @@ def _run_tool_on_document(
         # 'path' setting takes priority over everything.
         use_path = True
         argv = settings["path"]
-    elif settings["interpreter"] and not utils.is_current_interpreter(
-        settings["interpreter"][0]
-    ):
+    elif settings["interpreter"] and not utils.is_current_interpreter(settings["interpreter"][0]):
         # If there is a different interpreter set use JSON-RPC to the subprocess
         # running under that interpreter.
         argv = [TOOL_MODULE]
@@ -330,14 +329,13 @@ def _run_tool_on_document(
                     cwd=cwd,
                     source=document.source,
                 )
-                ...
             except Exception:
                 log_error(traceback.format_exc(chain=True))
                 raise
         if result.stderr:
             log_to_output(result.stderr)
 
-    log_to_output(f"{document.uri} :\r\n{result.stdout}")
+    log_debug(f"{document.uri} :\r\n{result.stdout}", settings=settings)
     return result
 
 
@@ -355,9 +353,7 @@ def _run_tool(extra_args: Sequence[str]) -> utils.RunResult:
         # 'path' setting takes priority over everything.
         use_path = True
         argv = settings["path"]
-    elif len(settings["interpreter"]) > 0 and not utils.is_current_interpreter(
-        settings["interpreter"][0]
-    ):
+    elif len(settings["interpreter"]) > 0 and not utils.is_current_interpreter(settings["interpreter"][0]):
         # If there is a different interpreter set use JSON-RPC to the subprocess
         # running under that interpreter.
         argv = [TOOL_MODULE]
@@ -402,26 +398,27 @@ def _run_tool(extra_args: Sequence[str]) -> utils.RunResult:
         # sys.path and that might not work for this scenario next time around.
         with utils.substitute_attr(sys, "path", sys.path[:]):
             try:
-                result = utils.run_module(
-                    module=TOOL_MODULE, argv=argv, use_stdin=True, cwd=cwd
-                )
+                result = utils.run_module(module=TOOL_MODULE, argv=argv, use_stdin=True, cwd=cwd)
             except Exception:
                 log_error(traceback.format_exc(chain=True))
                 raise
         if result.stderr:
             log_to_output(result.stderr)
 
-    log_to_output(f"\r\n{result.stdout}\r\n")
+    log_debug(f"\r\n{result.stdout}\r\n", settings=settings)
     return result
 
 
 # *****************************************************
 # Logging and notification.
 # *****************************************************
-def log_to_output(
-    message: str, msg_type: lsp.MessageType = lsp.MessageType.Log
-) -> None:
+def log_to_output(message: str, msg_type: lsp.MessageType = lsp.MessageType.Log) -> None:
     LSP_SERVER.show_message_log(message, msg_type)
+
+
+def log_debug(message: str, settings: dict):
+    if settings.get("showDebugLog", False) is True:
+        LSP_SERVER.show_message_log(message, lsp.MessageType.Log)
 
 
 def log_error(message: str) -> None:
