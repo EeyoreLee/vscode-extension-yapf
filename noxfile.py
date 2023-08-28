@@ -5,6 +5,7 @@
 import json
 import os
 import pathlib
+import shutil
 import urllib.request as url_lib
 from typing import List
 
@@ -163,3 +164,9 @@ def update_packages(session: nox.Session) -> None:
     session.install("wheel", "pip-tools")
     _update_pip_packages(session)
     _update_npm_packages(session)
+
+
+@nox.session()
+def resetup(session: nox.Session) -> None:
+    shutil.rmtree("./bundled/libs")
+    _setup_template_environment(session)
