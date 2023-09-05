@@ -249,9 +249,9 @@ def _run_tool_on_document(
     """
     if extra_args is None:
         extra_args = []
-    if str(document.uri).startswith("vscode-notebook-cell"):
-        # Skip notebook cells
-        return None
+    # Skip notebook cells
+    # if str(document.uri).startswith("vscode-notebook-cell"):
+    # return None
 
     if utils.is_stdlib_file(document.path):
         # Skip standard library python files.
@@ -260,7 +260,6 @@ def _run_tool_on_document(
     # deep copy here to prevent accidentally updating global settings.
     settings = copy.deepcopy(_get_settings_by_document(document))
 
-    print(f"settings: {settings}")
     code_workspace = settings["workspaceFS"]
     cwd = settings["cwd"]
 
