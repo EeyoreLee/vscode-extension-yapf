@@ -61,7 +61,7 @@ Choose the mode by the following
 ```
 
 ## Set your own yapf style
-* Set style by the following vscode settings which is equal to `yapf {files} --style '{based_on_style: pep8, indent_width: 2}'`
+* Set style by the following vscode settings which is equal to `yapf --style '{based_on_style: pep8, indent_width: 2}'`
 ```
   "yapf.args": ["--style", "{based_on_style: pep8, indent_width: 2}"]
 ```
