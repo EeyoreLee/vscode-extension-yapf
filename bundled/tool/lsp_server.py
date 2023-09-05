@@ -183,6 +183,7 @@ def _update_workspace_settings(settings):
     for setting in settings:
         key = uris.to_fs_path(setting["workspace"])
         WORKSPACE_SETTINGS[key] = {
+            "cwd": key,
             **setting,
             "workspaceFS": key,
         }
@@ -259,6 +260,7 @@ def _run_tool_on_document(
     # deep copy here to prevent accidentally updating global settings.
     settings = copy.deepcopy(_get_settings_by_document(document))
 
+    print(f"settings: {settings}")
     code_workspace = settings["workspaceFS"]
     cwd = settings["cwd"]
 
