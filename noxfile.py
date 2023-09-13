@@ -187,4 +187,5 @@ def update_packages(session: nox.Session) -> None:
 @nox.session()
 def resetup(session: nox.Session) -> None:
     shutil.rmtree("./bundled/libs")
+    shutil.rmtree("./bundled/tool-libs")
     _setup_template_environment(session)
