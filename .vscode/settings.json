@@ -14,14 +14,27 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.testing.cwd": "${workspaceFolder}",
-    "python.analysis.extraPaths": ["bundled/libs"],
+    "python.analysis.extraPaths": [
+        "bundled/libs",
+        "bundled/tool-libs"
+    ],
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true
     },
     "[python]": {
-        "editor.formatOnSaveMode": "modifications",
+        "editor.formatOnSaveMode": "file",
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "eeyore.yapf"
     },
+    "yapf.args": [
+        "-e",
+        "bundled/libs/*",
+        "bundled/tool-libs/*"
+    ],
+    "isort.args": [
+        "--skip-glob",
+        "bundled/libs/*",
+        "bundled/tool-libs/*"
+    ]
 }
