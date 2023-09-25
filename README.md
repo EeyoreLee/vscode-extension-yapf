@@ -14,7 +14,7 @@ Setting the following can enable this formatter quickly.
 
 
 ## Usage
-* Install `yapf` package from pip in following. This is optional but recommended way, else it will use the bundled `yapf=0.40.1`
+* Install `yapf` package from pip in following. This is optional but recommended way, else it will use the bundled `yapf=0.40.2`
 ```
 pip install yapf
 ```
