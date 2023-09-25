@@ -284,7 +284,7 @@ def _run_tool_on_document(
     argv += TOOL_ARGS + settings["args"] + extra_args
 
     if has_magics is True:
-        source = utils.encode_cell_magic(source, settings.get("cellMagics"))
+        source = utils.encode_cell_magic(source, settings.get("cellMagics", []))
 
     if use_stdin:
         argv += []
