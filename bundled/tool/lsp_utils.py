@@ -7,12 +7,16 @@ import contextlib
 import io
 import os
 import os.path
+import re
 import runpy
 import site
 import subprocess
 import sys
 import threading
+from itertools import chain
 from typing import Any, Callable, List, Sequence, Tuple, Union
+
+from constants import PYTHON_CELL_MAGICS
 
 # Save the working directory used when loading this module
 SERVER_CWD = os.getcwd()
@@ -27,19 +31,50 @@ def as_list(content: Union[Any, List[Any], Tuple[Any]]) -> Union[List[Any], Tupl
 
 
 # pylint: disable-next=consider-using-generator
-_site_paths = tuple(
-    [
-        os.path.normcase(os.path.normpath(p))
-        for p in (as_list(site.getsitepackages()) + as_list(site.getusersitepackages()))
-    ]
-)
+_site_paths = tuple([
+    os.path.normcase(os.path.normpath(p))
+    for p in (as_list(site.getsitepackages()) + as_list(site.getusersitepackages()))
+])
+
+
+def is_cell_magic(code_line: str, python_cell_magics: list = None) -> bool:
+    if python_cell_magics is None:
+        python_cell_magics = []
+    p = re.compile(f"^%{{1,2}}({'|'.join(chain(PYTHON_CELL_MAGICS, python_cell_magics))})")
+    r = p.search(code_line)
+    if r:
+        return True
+    return False
+
+
+def encode_line_magic(code_line: str) -> str:
+    return code_line.replace("%", "#\x00%\x00#")
+
+
+def encode_cell_magic(code: str, python_cell_magics: list = None) -> str:
+    if python_cell_magics is None:
+        python_cell_magics = []
+    masked_code_lines = []
+    for code_line in code.split("\n"):
+        if is_cell_magic(code_line=code_line, python_cell_magics=python_cell_magics):
+            masked_code_lines.append(encode_line_magic(code_line=code_line))
+        else:
+            masked_code_lines.append(code_line)
+    code = "\n".join(masked_code_lines)
+    return code
+
+
+def decode_line_magic(code_line: str) -> str:
+    return code_line.replace("#\x00%\x00#", "%")
+
+
+def decode_cell_magic(code: str) -> str:
+    return decode_line_magic(code)
 
 
 def is_same_path(file_path1, file_path2) -> bool:
     """Returns true if two paths are the same."""
-    return os.path.normcase(os.path.normpath(file_path1)) == os.path.normcase(
-        os.path.normpath(file_path2)
-    )
+    return os.path.normcase(os.path.normpath(file_path1)) == os.path.normcase(os.path.normpath(file_path2))
 
 
 def is_current_interpreter(executable) -> bool:
@@ -110,6 +145,7 @@ class YapfIO(io.TextIOWrapper):
     def write(self, s) -> None:
         self.buffer.write(s)
 
+
 @contextlib.contextmanager
 def substitute_attr(obj: Any, attribute: str, new_value: Any):
     """Manage object attributes context when using runpy.run_module()."""
@@ -136,9 +172,7 @@ def change_cwd(new_cwd):
     os.chdir(SERVER_CWD)
 
 
-def _run_module(
-    module: str, argv: Sequence[str], use_stdin: bool, source: str = None
-) -> RunResult:
+def _run_module(module: str, argv: Sequence[str], use_stdin: bool, source: str = None) -> RunResult:
     """Runs as a module."""
     str_output = CustomIO("<stdout>", encoding="utf-8")
     str_error = CustomIO("<stderr>", encoding="utf-8")
@@ -161,9 +195,7 @@ def _run_module(
     return RunResult(str_output.get_value(), str_error.get_value())
 
 
-def run_module(
-    module: str, argv: Sequence[str], use_stdin: bool, cwd: str, source: str = None
-) -> RunResult:
+def run_module(module: str, argv: Sequence[str], use_stdin: bool, cwd: str, source: str = None) -> RunResult:
     """Runs as a module."""
     with CWD_LOCK:
         if is_same_path(os.getcwd(), cwd):
@@ -172,18 +204,16 @@ def run_module(
             return _run_module(module, argv, use_stdin, source)
 
 
-def run_path(
-    argv: Sequence[str], use_stdin: bool, cwd: str, source: str = None
-) -> RunResult:
+def run_path(argv: Sequence[str], use_stdin: bool, cwd: str, source: str = None) -> RunResult:
     """Runs as an executable."""
     if use_stdin:
         with subprocess.Popen(
-            argv,
-            encoding="utf-8",
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            cwd=cwd,
+                argv,
+                encoding="utf-8",
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                cwd=cwd,
         ) as process:
             return RunResult(*process.communicate(input=source))
     else:

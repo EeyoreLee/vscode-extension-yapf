@@ -9,4 +9,4 @@
 # run the above commands manually.
 
 # Required packages
-yapf
+yapf==0.40.2

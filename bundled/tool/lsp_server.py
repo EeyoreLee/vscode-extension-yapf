@@ -3,6 +3,7 @@
 """Implementation of tool support over LSP."""
 from __future__ import annotations
 
+import ast
 import copy
 import json
 import os
@@ -49,16 +50,14 @@ GLOBAL_SETTINGS = {}
 RUNNER = pathlib.Path(__file__).parent / "lsp_runner.py"
 
 MAX_WORKERS = 5
-LSP_SERVER = server.LanguageServer(
-    name="yapf", version="v0.1.0", max_workers=MAX_WORKERS
-)
-
+LSP_SERVER = server.LanguageServer(name="yapf", version="v0.1.0", max_workers=MAX_WORKERS)
 
 TOOL_MODULE = "yapf"
 
 TOOL_DISPLAY = "yapf"
 
 TOOL_ARGS = []  # default arguments always passed to your tool.
+
 
 @LSP_SERVER.feature(lsp.TEXT_DOCUMENT_RANGE_FORMATTING)
 def range_formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | None:
@@ -91,7 +90,8 @@ def formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | Non
     return None
 
 
-def _formatting_helper(document: workspace.Document, extra_args: Optional[Sequence[str]] = None) -> list[lsp.TextEdit] | None:
+def _formatting_helper(document: workspace.Document,
+                       extra_args: Optional[Sequence[str]] = None) -> list[lsp.TextEdit] | None:
     result = _run_tool_on_document(document, use_stdin=True, extra_args=extra_args)
     if result.stdout:
         new_source = _match_line_endings(document, result.stdout)
@@ -138,12 +138,8 @@ def initialize(params: lsp.InitializeParams) -> None:
 
     settings = params.initialization_options["settings"]
     _update_workspace_settings(settings)
-    log_to_output(
-        f"Settings used to run Server:\r\n{json.dumps(settings, indent=4, ensure_ascii=False)}\r\n"
-    )
-    log_to_output(
-        f"Global settings:\r\n{json.dumps(GLOBAL_SETTINGS, indent=4, ensure_ascii=False)}\r\n"
-    )
+    log_to_output(f"Settings used to run Server:\r\n{json.dumps(settings, indent=4, ensure_ascii=False)}\r\n")
+    log_to_output(f"Global settings:\r\n{json.dumps(GLOBAL_SETTINGS, indent=4, ensure_ascii=False)}\r\n")
 
 
 @LSP_SERVER.feature(lsp.EXIT)
@@ -249,9 +245,14 @@ def _run_tool_on_document(
     """
     if extra_args is None:
         extra_args = []
-    # Skip notebook cells
-    # if str(document.uri).startswith("vscode-notebook-cell"):
-    # return None
+
+    source = document.source
+    has_magics = False
+    if str(document.uri).startswith("vscode-notebook-cell"):
+        try:
+            ast.parse(source.replace("\r\n", "\n"))
+        except SyntaxError:
+            has_magics = True
 
     if utils.is_stdlib_file(document.path):
         # Skip standard library python files.
@@ -269,6 +270,7 @@ def _run_tool_on_document(
         # 'path' setting takes priority over everything.
         use_path = True
         argv = settings["path"]
+        source = source.replace("\r\n", "\n")
     elif settings["interpreter"] and not utils.is_current_interpreter(settings["interpreter"][0]):
         # If there is a different interpreter set use JSON-RPC to the subprocess
         # running under that interpreter.
@@ -280,6 +282,9 @@ def _run_tool_on_document(
         argv = [TOOL_MODULE]
 
     argv += TOOL_ARGS + settings["args"] + extra_args
+
+    if has_magics is True:
+        source = utils.encode_cell_magic(source, settings.get("cellMagics"))
 
     if use_stdin:
         argv += []
@@ -293,7 +298,7 @@ def _run_tool_on_document(
             argv=argv,
             use_stdin=use_stdin,
             cwd=cwd,
-            source=document.source.replace("\r\n", "\n"),
+            source=source,
         )
         if result.stderr:
             log_to_output(result.stderr)
@@ -308,7 +313,7 @@ def _run_tool_on_document(
             argv=argv,
             use_stdin=use_stdin,
             cwd=cwd,
-            source=document.source,
+            source=source,
         )
         if result.exception:
             log_error(result.exception)
@@ -328,13 +333,16 @@ def _run_tool_on_document(
                     argv=argv,
                     use_stdin=use_stdin,
                     cwd=cwd,
-                    source=document.source,
+                    source=source,
                 )
             except Exception:
                 log_error(traceback.format_exc(chain=True))
                 raise
         if result.stderr:
             log_to_output(result.stderr)
+
+    if has_magics:
+        result.stdout = utils.decode_cell_magic(result.stdout)
 
     log_debug(f"{document.uri} :\r\n{result.stdout}", settings=settings)
     return result

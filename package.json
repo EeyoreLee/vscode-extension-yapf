@@ -133,6 +133,15 @@
                     "tags": [
                         "experimental"
                     ]
+                },
+                "yapf.cellMagics": {
+                    "default": [],
+                    "description": "Useful for formatting cells with custom python magics. e.g. [\"matplotlib inline\"]",
+                    "items": {
+                        "type": "string"
+                    },
+                    "scope": "resource",
+                    "type": "array"
                 }
             }
         },

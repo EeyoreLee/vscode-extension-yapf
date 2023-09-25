@@ -14,6 +14,7 @@ export interface ISettings {
     importStrategy: string;
     showNotifications: string;
     showDebugLog: boolean;
+    cellMagics: string[];
 }
 
 export function getExtensionSettings(namespace: string, includeInterpreter?: boolean): Promise<ISettings[]> {
@@ -70,7 +71,8 @@ export async function getWorkspaceSettings(
         interpreter: resolveVariables(interpreter, workspace),
         importStrategy: config.get<string>(`importStrategy`) ?? 'fromEnvironment',
         showNotifications: config.get<string>(`showNotifications`) ?? 'off',
-        showDebugLog: config.get<boolean>(`showDebugLog`) ?? false
+        showDebugLog: config.get<boolean>(`showDebugLog`) ?? false,
+        cellMagics: resolveVariables(config.get<string[]>(`cellMagics`) ?? [], workspace)
     };
     return workspaceSetting;
 }
@@ -99,7 +101,8 @@ export async function getGlobalSettings(namespace: string, includeInterpreter?: 
         interpreter: interpreter,
         importStrategy: getGlobalValue<string>(config, 'importStrategy', 'fromEnvironment'),
         showNotifications: getGlobalValue<string>(config, 'showNotifications', 'off'),
-        showDebugLog: getGlobalValue<boolean>(config, 'showDebugLog', false)
+        showDebugLog: getGlobalValue<boolean>(config, 'showDebugLog', false),
+        cellMagics: getGlobalValue<string[]>(config, 'cellMagics', [])
     };
     return setting;
 }
@@ -112,6 +115,7 @@ export function checkIfConfigurationChanged(e: ConfigurationChangeEvent, namespa
         `${namespace}.importStrategy`,
         `${namespace}.showNotifications`,
         `${namespace}.showDebugLog`,
+        `${namespace}.cellMagics`,
     ];
     const changed = settings.map((s) => e.affectsConfiguration(s));
     return changed.includes(true);
