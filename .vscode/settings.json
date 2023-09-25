@@ -30,11 +30,13 @@
     "yapf.args": [
         "-e",
         "bundled/libs/*",
+        "-e",
         "bundled/tool-libs/*"
     ],
     "isort.args": [
         "--skip-glob",
         "bundled/libs/*",
+        "--skip-glob",
         "bundled/tool-libs/*"
     ]
 }
