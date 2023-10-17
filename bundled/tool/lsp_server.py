@@ -248,11 +248,14 @@ def _run_tool_on_document(
 
     source = document.source
     has_magics = False
+    blank_cell_trail = False
     if str(document.uri).startswith("vscode-notebook-cell"):
         try:
             ast.parse(source.replace("\r\n", "\n"))
         except SyntaxError:
             has_magics = True
+        if source.replace("\r\n", "\n").endswith("\n"):
+            blank_cell_trail = True
 
     if utils.is_stdlib_file(document.path):
         # Skip standard library python files.
@@ -343,6 +346,9 @@ def _run_tool_on_document(
 
     if has_magics:
         result.stdout = utils.decode_cell_magic(result.stdout)
+
+    if str(document.uri).startswith("vscode-notebook-cell") and blank_cell_trail is not True:
+        result.stdout = result.stdout.rstrip("\n")
 
     log_debug(f"{document.uri} :\r\n{result.stdout}", settings=settings)
     return result
