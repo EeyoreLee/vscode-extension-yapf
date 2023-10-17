@@ -1,6 +1,8 @@
 # Vscode formatter extension support for python files using yapf
 
-A formatter extension with support for python files and notebook cell. Feel free to open an issue to tell me what feature else do you need since it's a preview version.
+A formatter extension with support for python files and notebook cell. Feel free to open an issue to tell me what feature else do you need since it's a preview version.  
+Note:  
+* This extension is supported for all [actively supported versions](https://devguide.python.org/versions/#supported-versions) of the python language (i.e., python >= 3.8(EOL: 2024-10)).
 
 ## Quick Start
 Setting the following can enable this formatter quickly.
