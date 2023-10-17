@@ -254,7 +254,7 @@ def _run_tool_on_document(
             ast.parse(source.replace("\r\n", "\n"))
         except SyntaxError:
             has_magics = True
-        if source.replace("\r\n", "\n").endswith("\n"):
+        if source.replace("\r\n", "\n").rstrip(" \t").endswith("\n"):
             blank_cell_trail = True
 
     if utils.is_stdlib_file(document.path):
