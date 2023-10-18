@@ -26,13 +26,13 @@ lsprotocol==2023.0.0b1 \
     --hash=sha256:ade2cd0fa0ede7965698cb59cd05d3adbd19178fd73e83f72ef57a032fbb9d62 \
     --hash=sha256:f7a2d4655cbd5639f373ddd1789807450c543341fa0a32b064ad30dbb9f510d4
     # via pygls
-packaging==23.1 \
-    --hash=sha256:994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61 \
-    --hash=sha256:a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f
+packaging==23.2 \
+    --hash=sha256:048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5 \
+    --hash=sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7
     # via -r ./requirements.in
-pygls==1.0.2 \
-    --hash=sha256:6d278d29fa6559b0f7a448263c85cb64ec6e9369548b02f1a7944060848b21f9 \
-    --hash=sha256:888ed63d1f650b4fc64d603d73d37545386ec533c0caac921aed80f80ea946a4
+pygls==1.1.1 \
+    --hash=sha256:330704551a335b443bf1cdfb0507f121608591095898d451f0007eeb1510067c \
+    --hash=sha256:b1b4ddd6f800a5573f61f0ec2cd3bc7a859d171f48142b46e1de35a1357c00fe
     # via -r ./requirements.in
 typeguard==3.0.2 \
     --hash=sha256:bbe993854385284ab42fd5bd3bee6f6556577ce8b50696d6cb956d704f286c8e \
