@@ -59,6 +59,30 @@ TOOL_DISPLAY = "yapf"
 TOOL_ARGS = []  # default arguments always passed to your tool.
 
 
+@LSP_SERVER.feature(lsp.TEXT_DOCUMENT_ON_TYPE_FORMATTING,
+                    lsp.DocumentOnTypeFormattingOptions(first_trigger_character="\n"))
+def on_type_formatting(params: lsp.DocumentFormattingParams) -> Optional[list[lsp.TextEdit]]:
+    document = LSP_SERVER.workspace.get_document(params.text_document.uri)
+    try:
+        ast_tree = ast.parse(document.source.replace("\r\n", "\n"))
+    except SyntaxError:
+        return None
+    position_lineno = params.position.line
+    for node in ast_tree.body:
+        lineno = node.lineno
+        end_lineno = node.end_lineno
+        if position_lineno >= lineno and position_lineno <= end_lineno:
+            break
+    start = lineno
+    end = end_lineno
+    extra_args = ["-l", f"{start}-{end}"]
+    edits = _formatting_helper(document, extra_args=extra_args)
+    if edits:
+        return edits
+
+    return None
+
+
 @LSP_SERVER.feature(lsp.TEXT_DOCUMENT_RANGE_FORMATTING)
 def range_formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | None:
     document = LSP_SERVER.workspace.get_document(params.text_document.uri)
