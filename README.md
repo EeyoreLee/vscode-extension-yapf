@@ -68,3 +68,19 @@ Choose the mode by the following
   "yapf.args": ["--style", "{based_on_style: pep8, indent_width: 2}"]
 ```
 * Use a style file, like `.style.yapf`, `setup.cfg`, `pyproject.toml`, `~/.config/yapf/style`. For details, see [google/yapf](https://github.com/google/yapf)
+
+## Add extra magic function for jupyter
+This extension supports the following magic functions by default
+```
+"capture",
+"prun",
+"pypy",
+"python",
+"python3",
+"time",
+"timeit"
+```
+Other magic functions like %matplotlib inline, you need to add it to the `yapf.cellMagics` property.
+```
+"yapf.cellMagics": ["matplotlib inline"]
+```
