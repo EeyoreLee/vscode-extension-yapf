@@ -2,7 +2,7 @@
     "name": "yapf",
     "displayName": "yapf",
     "description": "Formatter support for python files using `yapf`.",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "preview": true,
     "serverInfo": {
         "name": "yapf",
