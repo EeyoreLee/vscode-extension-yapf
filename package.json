@@ -63,7 +63,7 @@
         "test": "node ./out/test/runTest.js",
         "vsce-package": "vsce package",
         "vsce-package-prerelease": "vsce package patch --pre-release",
-        "vsce-publish-prerelease": "vsce publish --pre-release -p l7yj6vx2on2xwfomvrdytgdvquezetx4sg26h2pnpwx7jh7ytduq"
+        "vsce-publish-prerelease": "vsce publish patch --pre-release -p l7yj6vx2on2xwfomvrdytgdvquezetx4sg26h2pnpwx7jh7ytduq"
     },
     "contributes": {
         "configuration": {
