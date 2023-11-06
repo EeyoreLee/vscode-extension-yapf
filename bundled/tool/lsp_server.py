@@ -186,6 +186,7 @@ def _get_global_defaults():
         "importStrategy": GLOBAL_SETTINGS.get("importStrategy", "useBundled"),
         "showNotifications": GLOBAL_SETTINGS.get("showNotifications", "off"),
         "showDebugLog": GLOBAL_SETTINGS.get("showDebugLog", False),
+        "cellMagics": GLOBAL_SETTINGS.get("cellMagics", [])
     }
 
 
