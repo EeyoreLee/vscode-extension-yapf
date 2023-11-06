@@ -61,7 +61,8 @@
         "lint": "eslint src --ext ts",
         "format-check": "prettier --check 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
         "test": "node ./out/test/runTest.js",
-        "vsce-package": "vsce package -o yapf.vsix"
+        "vsce-package": "vsce package",
+        "vscs-package-prerelease": "vsce package minor --pre-release"
     },
     "contributes": {
         "configuration": {
