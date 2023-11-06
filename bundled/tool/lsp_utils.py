@@ -48,7 +48,7 @@ def is_cell_magic(code_line: str, python_cell_magics: list = None) -> bool:
 
 
 def encode_line_magic(code_line: str) -> str:
-    return code_line.replace("%", "#\x00%\x00#")
+    return code_line.replace("%", "#\x01%\x01#")
 
 
 def encode_cell_magic(code: str, python_cell_magics: list = None) -> str:
@@ -65,7 +65,7 @@ def encode_cell_magic(code: str, python_cell_magics: list = None) -> str:
 
 
 def decode_line_magic(code_line: str) -> str:
-    return code_line.replace("#\x00%\x00#", "%")
+    return code_line.replace("#\x01%\x01#", "%")
 
 
 def decode_cell_magic(code: str) -> str:
