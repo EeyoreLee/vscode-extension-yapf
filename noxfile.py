@@ -206,7 +206,11 @@ def update_build_number(session):
     parts = re.split("\\.|-", package_json["version"])
     major, minor = parts[:2]
 
-    version = f"{major}.{minor}.{session.posargs[0]}"
+    commit_time = session.posargs[0]
+    # patch format: 1{day}{hour}{minute}{second}
+    patch = f"1{commit_time.split()[0].split('-')[-1]}{commit_time.split()[1].replace(':', '')}"
+
+    version = f"{major}.{minor}.{patch}"
     version = version if len(parts) == 3 else f"{version}-{''.join(parts[3:])}"
 
     session.log(f"Updating version from {package_json['version']} to {version}")

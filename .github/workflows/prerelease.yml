@@ -73,7 +73,9 @@ jobs:
       # GITHUB_RUN_ID is a unique number for each run within a repository.
       # This number does not change if you re-run the workflow run.
       - name: Update extension build number
-        run: python -m nox -s update_build_number -- $GITHUB_RUN_ID
+        run: |
+          commit_time=`git show --pretty=format:"%ci" | head -1`
+          python -m nox -s update_build_number -- $commit_time
         shell: bash
 
       - name: Publish prerelease VSIX
