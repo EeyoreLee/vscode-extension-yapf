@@ -186,6 +186,7 @@ def _get_global_defaults():
         "importStrategy": GLOBAL_SETTINGS.get("importStrategy", "useBundled"),
         "showNotifications": GLOBAL_SETTINGS.get("showNotifications", "off"),
         "showDebugLog": GLOBAL_SETTINGS.get("showDebugLog", False),
+        "cellMagics": GLOBAL_SETTINGS.get("cellMagics", [])
     }
 
 
@@ -311,6 +312,7 @@ def _run_tool_on_document(
     argv += TOOL_ARGS + settings["args"] + extra_args
 
     if has_magics is True:
+        log_debug(f"cellMagics: {settings.get('cellMagics', [])}", settings)
         source = utils.encode_cell_magic(source, settings.get("cellMagics", []))
 
     if use_stdin:
