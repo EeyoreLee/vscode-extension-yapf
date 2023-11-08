@@ -2,7 +2,7 @@
     "name": "yapf",
     "displayName": "yapf",
     "description": "Formatter support for python files using `yapf`.",
-    "version": "0.1.10",
+    "version": "0.1.13",
     "preview": true,
     "serverInfo": {
         "name": "yapf",
@@ -61,7 +61,9 @@
         "lint": "eslint src --ext ts",
         "format-check": "prettier --check 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
         "test": "node ./out/test/runTest.js",
-        "vsce-package": "vsce package -o yapf.vsix"
+        "vsce-package": "vsce package",
+        "vsce-package-prerelease": "vsce package patch --pre-release",
+        "vsce-publish-prerelease": "vsce publish patch --pre-release -p e66rsbd32a5cyxhzwhuq6dffepfl5xdcas7h5n3yaxjdtb6bayua"
     },
     "contributes": {
         "configuration": {
