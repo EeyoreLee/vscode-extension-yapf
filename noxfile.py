@@ -5,6 +5,7 @@
 import json
 import os
 import pathlib
+import re
 import shutil
 import urllib.request as url_lib
 from typing import List
@@ -52,8 +53,7 @@ def _check_files(names: List[str]) -> None:
 
 def _update_pip_packages(session: nox.Session) -> None:
     session.run("pip-compile", "--generate-hashes", "--resolver=backtracking", "--upgrade", "./requirements.in")
-    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking",
-                "--upgrade", "./requirements-tool.in")
+    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking", "--upgrade", "./requirements-tool.in")
     session.run(
         "pip-compile",
         "--generate-hashes",
@@ -91,11 +91,8 @@ def _update_npm_packages(session: nox.Session) -> None:
             package_json["devDependencies"][package] = latest
 
     # Ensure engine matches the package
-    if (package_json["engines"]["vscode"]
-            != package_json["devDependencies"]["@types/vscode"]):
-        print(
-            "Please check VS Code engine version and @types/vscode version in package.json."
-        )
+    if (package_json["engines"]["vscode"] != package_json["devDependencies"]["@types/vscode"]):
+        print("Please check VS Code engine version and @types/vscode version in package.json.")
 
     new_package_json = json.dumps(package_json, indent=4)
     # JSON dumps uses \n for line ending on all platforms by default
@@ -107,10 +104,8 @@ def _update_npm_packages(session: nox.Session) -> None:
 
 def _setup_template_environment(session: nox.Session) -> None:
     session.install("wheel", "pip-tools")
-    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking",
-                "--upgrade", "./requirements.in")
-    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking",
-                "--upgrade", "./requirements-tool.in")
+    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking", "--upgrade", "./requirements.in")
+    session.run("pip-compile", "--generate-hashes", "--resolver=backtracking", "--upgrade", "./requirements-tool.in")
     session.run(
         "pip-compile",
         "--generate-hashes",
@@ -189,3 +184,31 @@ def resetup(session: nox.Session) -> None:
     shutil.rmtree("./bundled/libs")
     shutil.rmtree("./bundled/tool-libs")
     _setup_template_environment(session)
+
+
+@nox.session()
+def install_package(session: nox.Session) -> None:
+    _install_bundle(session)
+
+
+@nox.session()
+def update_build_number(session):
+    """Updates buildnumber for the extension."""
+    if len(session.posargs) == 0:
+        session.log("No updates to package version")
+        return
+
+    package_json_path = pathlib.Path(__file__).parent / "package.json"
+    session.log(f"Reading package.json at: {package_json_path}")
+
+    package_json = json.loads(package_json_path.read_text(encoding="utf-8"))
+
+    parts = re.split("\\.|-", package_json["version"])
+    major, minor = parts[:2]
+
+    version = f"{major}.{minor}.{session.posargs[0]}"
+    version = version if len(parts) == 3 else f"{version}-{''.join(parts[3:])}"
+
+    session.log(f"Updating version from {package_json['version']} to {version}")
+    package_json["version"] = version
+    package_json_path.write_text(json.dumps(package_json, indent=4), encoding="utf-8")
