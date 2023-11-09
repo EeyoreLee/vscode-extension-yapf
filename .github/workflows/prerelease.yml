@@ -6,9 +6,9 @@ on:
       - closed
     branches:
       - 'main'
-    # paths:
-    #   - 'bundled/**'
-    #   - 'src/**'
+    paths:
+      - 'bundled/**'
+      - 'src/**'
 
 env:
   NODE_VERSION: 16.19.0
@@ -69,14 +69,10 @@ jobs:
         run: python -m nox -s install_package
         shell: bash
 
-      # Use the GITHUB_RUN_ID environment variable to update the build number.
-      # GITHUB_RUN_ID is a unique number for each run within a repository.
-      # This number does not change if you re-run the workflow run.
       - name: Update extension build number
         run: |
           commit_time=`git show --pretty=format:"%ci" | head -1`
-          python -m nox -s update_build_number -- $commit_time
-        shell: bash
+          python -m nox -s update_build_number -- "$commit_time"
 
       - name: Publish prerelease VSIX
         run: npm run vsce-publish-prerelease ${{ secrets.MARKETPLACE_ACCESS_TOKEN }}
