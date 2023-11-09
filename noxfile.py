@@ -204,12 +204,14 @@ def update_build_number(session):
     package_json = json.loads(package_json_path.read_text(encoding="utf-8"))
 
     parts = re.split("\\.|-", package_json["version"])
-    major, minor = parts[:2]
 
     commit_time = session.posargs[0]
+    major = commit_time.split()[0].split('-')[0]
+    minor = commit_time.split()[0].split('-')[1]
     # patch format: 1{day}{hour}{minute}{second}
     patch = f"1{commit_time.split()[0].split('-')[-1]}{commit_time.split()[1].replace(':', '')}"
 
+    # version format : {year}.{month}.1{day}{hour}{minute}{second}
     version = f"{major}.{minor}.{patch}"
     version = version if len(parts) == 3 else f"{version}-{''.join(parts[3:])}"
 
