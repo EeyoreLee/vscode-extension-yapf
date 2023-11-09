@@ -63,8 +63,15 @@ TOOL_ARGS = []  # default arguments always passed to your tool.
                     lsp.DocumentOnTypeFormattingOptions(first_trigger_character="\n"))
 def on_type_formatting(params: lsp.DocumentFormattingParams) -> Optional[list[lsp.TextEdit]]:
     document = LSP_SERVER.workspace.get_document(params.text_document.uri)
+    source = document.source.replace("\r\n", "\n")
+    if not document.lines[params.position.line - 1].rstrip(" \t\n") or \
+        document.lines[params.position.line -1].rstrip("\n").endswith(","):
+        return None
+    if str(document.uri).startswith("vscode-notebook-cell"):
+        settings = copy.deepcopy(_get_settings_by_document(document))
+        source = utils.encode_cell_magic(source, settings.get("cellMagics", []))
     try:
-        ast_tree = ast.parse(document.source.replace("\r\n", "\n"))
+        ast_tree = ast.parse(source)
     except SyntaxError:
         return None
     position_lineno = params.position.line
