@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: setup
-        uses: .github/actions/setup
+        uses: ./.github/actions/setup
         with:
           node_version: ${{ env.NODE_VERSION}}
 
