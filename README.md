@@ -10,7 +10,8 @@ Setting the following can enable this formatter quickly.
   "[python]": {
     "editor.formatOnSaveMode": "file",
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "eeyore.yapf"
+    "editor.defaultFormatter": "eeyore.yapf",
+    "editor.formatOnType": false
   }
 ```
 
@@ -26,16 +27,16 @@ pip install yapf
     "editor.defaultFormatter": "eeyore.yapf"
   }
 ```
-and change the following, the reason see [issue#13](https://github.com/EeyoreLee/vscode-extension-yapf/issues/13)
-```
-  "python.formatting.provider": "none"
-```
 * Enable format on save by adding the following
 ```
   "[python]": {
     "editor.formatOnSave": true
   }
 ```
+
+## Address crash for python3.7 or lower
+Use `yapf.interpreter` property to select a python interpreter that 3.8 or higher to run this tool by subprocess
+
 
 ## file mode & modifications mode
 Choose the mode by the following

@@ -208,8 +208,13 @@ def update_build_number(session):
     commit_time = session.posargs[0]
     major = commit_time.split()[0].split('-')[0]
     minor = commit_time.split()[0].split('-')[1]
-    # patch format: 1{day}{hour}{minute}{second}
-    patch = f"1{commit_time.split()[0].split('-')[-1]}{commit_time.split()[1].replace(':', '')}"
+    if len(session.posargs) > 1 and session.posargs[1] == "release":
+        placeholder = "1"
+    else:
+        placeholder = "2"
+    # release patch format: 1{day}{hour}{minute}{second}
+    # prerelease patch format: 2{day}{hour}{minute}{second}
+    patch = f"{placeholder}{commit_time.split()[0].split('-')[-1]}{commit_time.split()[1].replace(':', '')}"
 
     # version format : {year}.{month}.1{day}{hour}{minute}{second}
     version = f"{major}.{minor}.{patch}"
