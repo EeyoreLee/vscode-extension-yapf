@@ -2,7 +2,7 @@ name: test_scheduler
 
 on:
   schedule:
-    - cron: '20 * * * *'
+    - cron: '40 * * * *'
 
 
 env:
@@ -13,8 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: setup
-        uses: ./.github/actions/setup
+        uses: .github/actions/setup
         with:
           node_version: ${{ env.NODE_VERSION}}
 
