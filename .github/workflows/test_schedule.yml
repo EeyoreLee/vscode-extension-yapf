@@ -1,15 +1,9 @@
-name: prerelease
+name: test_scheduler
 
 on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - 'main'
-    paths:
-      - 'bundled/**'
-      - 'src/**'
-      - '!src/test/**'
+  schedule:
+    - cron: '0 * * * *'
+
 
 env:
   NODE_VERSION: 16.19.0
@@ -28,8 +22,8 @@ jobs:
       - name: Update extension build number
         run: |
           commit_time=`git show --pretty=format:"%ci" | head -1`
-          python -m nox -s update_build_number -- "$commit_time"
+          python -m nox -s update_build_number -- "$commit_time" release
 
-      - name: Publish prerelease VSIX
-        run: npm run vsce-publish-prerelease ${{ secrets.MARKETPLACE_ACCESS_TOKEN }}
-        shell: bash
+      # - name: Publish prerelease VSIX
+      #   run: npm run vsce-publish-release ${{ secrets.MARKETPLACE_ACCESS_TOKEN }}
+      #   shell: bash

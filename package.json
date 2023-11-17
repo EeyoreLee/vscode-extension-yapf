@@ -62,6 +62,7 @@
         "format-check": "prettier --check 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
         "test": "node ./out/test/runTest.js",
         "vsce-package": "vsce package",
+        "vsce-publish-release": "vsce publish -p",
         "vsce-package-prerelease": "vsce package --pre-release",
         "vsce-publish-prerelease": "vsce publish --pre-release -p"
     },
