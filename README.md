@@ -64,11 +64,17 @@ Choose the mode by the following
 ```
 
 ## Set your own yapf style
+Note this setting has to be in the global scope of `settings.json`, not in a `[python]` block.
+
 * Set style by the following vscode settings which is equal to `yapf --style '{based_on_style: pep8, indent_width: 2}'`
 ```
   "yapf.args": ["--style", "{based_on_style: pep8, indent_width: 2}"]
 ```
+
 * Use a style file, like `.style.yapf`, `setup.cfg`, `pyproject.toml`, `~/.config/yapf/style`. For details, see [google/yapf](https://github.com/google/yapf)
+```
+  "yapf.args": ["--style", "/home/example/.yapf"]
+```
 
 ## Add extra magic function for jupyter
 This extension supports the following magic functions by default
