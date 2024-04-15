@@ -207,7 +207,7 @@ def update_build_number(session):
 
     commit_time = session.posargs[0]
     major = commit_time.split()[0].split('-')[0]
-    minor = commit_time.split()[0].split('-')[1]
+    minor = str(int(commit_time.split()[0].split('-')[1]))
     if len(session.posargs) > 1 and session.posargs[1] == "release":
         placeholder = "1"
     else:
