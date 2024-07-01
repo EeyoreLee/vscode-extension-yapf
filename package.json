@@ -167,7 +167,7 @@
         "@types/glob": "^8.1.0",
         "@types/node": "16.x",
         "@typescript-eslint/eslint-plugin": "^7.11.0",
-        "@typescript-eslint/parser": "^7.8.0",
+        "@typescript-eslint/parser": "^7.15.0",
         "@vscode/test-electron": "^2.4.0",
         "@vscode/vsce": "^2.26.1",
         "eslint": "^8.57.0",
