@@ -1,0 +1,56 @@
+name: setup
+
+inputs:
+  node_version:
+    description: 'Version of Node to install'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node_version }}
+        cache: 'npm'
+
+    - name: Use Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+
+    - name: Pip lib cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-build-vsix-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-build-vsix-
+
+    - name: Pip tool cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-build-vsix-${{ hashFiles('**/requirements-tool.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-build-vsix-tool
+
+    - name: Upgrade pip
+      run: python -m pip install -U pip
+      shell: bash
+
+    - name: Install build pre-requisite
+      run: python -m pip install wheel
+      shell: bash
+
+    - name: Install nox
+      run: python -m pip install nox
+      shell: bash
+
+    - name: Run npm ci
+      run: npm ci --prefer-offline
+      shell: bash
+
+    - name: Install bundled python packages
+      run: python -m nox -s install_package
+      shell: bash

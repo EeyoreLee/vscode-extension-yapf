@@ -2,7 +2,7 @@
     "name": "yapf",
     "displayName": "yapf",
     "description": "Formatter support for python files using `yapf`.",
-    "version": "0.1.9",
+    "version": "2023.11.0",
     "preview": true,
     "serverInfo": {
         "name": "yapf",
@@ -61,7 +61,10 @@
         "lint": "eslint src --ext ts",
         "format-check": "prettier --check 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
         "test": "node ./out/test/runTest.js",
-        "vsce-package": "vsce package -o yapf.vsix"
+        "vsce-package": "vsce package",
+        "vsce-publish-release": "vsce publish -p",
+        "vsce-package-prerelease": "vsce package --pre-release",
+        "vsce-publish-prerelease": "vsce publish --pre-release -p"
     },
     "contributes": {
         "configuration": {
@@ -154,25 +157,25 @@
         ]
     },
     "dependencies": {
-        "@vscode/python-extension": "^1.0.4",
-        "fs-extra": "^11.1.1",
+        "@vscode/python-extension": "^1.0.5",
+        "fs-extra": "^11.2.0",
         "vscode-languageclient": "^8.1.0"
     },
     "devDependencies": {
-        "@types/fs-extra": "^11.0.1",
+        "@types/fs-extra": "^11.0.4",
         "@types/vscode": "1.78.0",
         "@types/glob": "^8.1.0",
         "@types/node": "16.x",
-        "@typescript-eslint/eslint-plugin": "^6.5.0",
-        "@typescript-eslint/parser": "^6.6.0",
-        "@vscode/test-electron": "^2.3.4",
-        "@vscode/vsce": "^2.20.1",
-        "eslint": "^8.48.0",
-        "glob": "^10.3.4",
-        "prettier": "^3.0.2",
-        "typescript": "^5.2.2",
-        "ts-loader": "^9.4.4",
-        "webpack": "^5.88.2",
+        "@typescript-eslint/eslint-plugin": "^8.19.0",
+        "@typescript-eslint/parser": "^8.19.0",
+        "@vscode/test-electron": "^2.4.1",
+        "@vscode/vsce": "^3.2.1",
+        "eslint": "^9.17.0",
+        "glob": "^11.0.0",
+        "prettier": "^3.4.2",
+        "typescript": "^5.7.2",
+        "ts-loader": "^9.5.1",
+        "webpack": "^5.97.1",
         "webpack-cli": "^5.1.4"
     }
 }

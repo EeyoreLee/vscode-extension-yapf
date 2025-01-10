@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import ast
 import copy
-import importlib
 import json
 import os
 import pathlib
@@ -94,8 +93,8 @@ def on_type_formatting(params: lsp.DocumentFormattingParams) -> Optional[list[ls
 @LSP_SERVER.feature(lsp.TEXT_DOCUMENT_RANGE_FORMATTING)
 def range_formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | None:
     document = LSP_SERVER.workspace.get_document(params.text_document.uri)
-    start = params.range.start.line + 1
-    end = params.range.end.line + 1
+    start =params.range.start.line + 1
+    end =params.range.end.line + 1
     extra_args = ["-l", f"{start}-{end}"]
     edits = _formatting_helper(document, extra_args=extra_args)
     if edits:
@@ -124,8 +123,6 @@ def formatting(params: lsp.DocumentFormattingParams) -> list[lsp.TextEdit] | Non
 
 def _formatting_helper(document: workspace.Document,
                        extra_args: Optional[Sequence[str]] = None) -> list[lsp.TextEdit] | None:
-    if _is_ignored(document) is True:
-        return None
     result = _run_tool_on_document(document, use_stdin=True, extra_args=extra_args)
     if result.stdout:
         new_source = _match_line_endings(document, result.stdout)
@@ -139,38 +136,6 @@ def _formatting_helper(document: workspace.Document,
             )
         ]
     return None
-
-
-def _is_ignored(document: workspace.Document) -> bool:
-    try:
-        yapf_module = importlib.import_module("yapf")
-        # deep copy here to prevent accidentally updating global settings.
-        settings = copy.deepcopy(_get_settings_by_document(document))
-        code_workspace = settings["workspaceFS"]
-        path = document.path[len(code_workspace):] if document.path.startswith(code_workspace) else document.path
-        path = path.lstrip("/")
-        exclude: list[str] = yapf_module.file_resources.GetExcludePatternsForDir(code_workspace)
-        if exclude and any(e.startswith('./') for e in exclude):
-            log_error("path in '--exclude' should not start with ./")
-            return False
-        exclude = exclude and [e.rstrip('/' + os.path.sep) for e in exclude]
-        exclude_from_args = _get_exclude_from_args(settings=settings)
-        exclude = (exclude_from_args or []) + exclude
-        return yapf_module.file_resources.IsIgnored(path, exclude)
-    except Exception as e:
-        log_error(str(e))
-        return False
-
-
-def _get_exclude_from_args(settings: dict) -> list[str]:
-    exclude = []
-    args = settings.get("args", [])
-    if not args:
-        return exclude
-    for idx, i in enumerate(args[:-1]):
-        if i in ("-e", "--exclude"):  # BUG: Exceptional situations need to be considered
-            exclude.append(args[idx + 1])
-    return exclude
 
 
 def _get_line_endings(lines: list[str]) -> str:
