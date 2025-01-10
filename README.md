@@ -2,7 +2,7 @@
 
 A formatter extension with support for python files and notebook cell. Feel free to open an issue to tell me what feature else do you need since it's a preview version.  
 Note:  
-* This extension is supported for all [actively supported versions](https://devguide.python.org/versions/#supported-versions) of the python language (i.e., python >= 3.8(EOL: 2024-10)).
+* This extension is supported for all [actively supported versions](https://devguide.python.org/versions/#supported-versions) of the python language (i.e., python >= 3.9(EOL: 2025-10)).
 
 ## Quick Start
 Setting the following can enable this formatter quickly.
@@ -17,7 +17,7 @@ Setting the following can enable this formatter quickly.
 
 
 ## Usage
-* Install `yapf` package from pip in following. This is optional but recommended way, else it will use the bundled `yapf=0.40.2`
+* Install `yapf` package from pip in following. This is optional but recommended way, else it will use the bundled `yapf=0.43.0`
 ```
 pip install yapf
 ```
@@ -34,8 +34,8 @@ pip install yapf
   }
 ```
 
-## Address crash for python3.7 or lower
-Use `yapf.interpreter` property to select a python interpreter that 3.8 or higher to run this tool by subprocess
+## Address crash for python3.8 or lower
+Use `yapf.interpreter` property to select a python interpreter that 3.9 or higher to run this tool by subprocess
 
 
 ## file mode & modifications mode
