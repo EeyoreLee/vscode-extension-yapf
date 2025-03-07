@@ -64,7 +64,8 @@
         "vsce-package": "vsce package",
         "vsce-publish-release": "vsce publish -p",
         "vsce-package-prerelease": "vsce package --pre-release",
-        "vsce-publish-prerelease": "vsce publish --pre-release -p"
+        "vsce-publish-prerelease": "vsce publish --pre-release -p",
+        "ovsx-publish-release": "npx ovsx publish -p"
     },
     "contributes": {
         "configuration": {
