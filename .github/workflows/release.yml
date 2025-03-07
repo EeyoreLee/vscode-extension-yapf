@@ -6,7 +6,7 @@ on:
 
 
 env:
-  NODE_VERSION: 16.19.0
+  NODE_VERSION: 20.14.0
 
 jobs:
   release:
@@ -26,6 +26,6 @@ jobs:
           commit_time=`git show --pretty=format:"%ci" | head -1`
           python -m nox -s update_build_number -- "$commit_time" release
 
-      - name: Publish prerelease VSIX
+      - name: Publish release VSIX
         run: npm run vsce-publish-release ${{ secrets.MARKETPLACE_ACCESS_TOKEN }}
         shell: bash

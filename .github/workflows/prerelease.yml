@@ -12,7 +12,7 @@ on:
       - '!src/test/**'
 
 env:
-  NODE_VERSION: 16.19.0
+  NODE_VERSION: 20.14.0
 
 jobs:
   if_merged:
