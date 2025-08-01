@@ -4,7 +4,7 @@ A formatter extension with support for python files and notebook cell. Feel free
 Note:  
 * This extension is supported for all [actively supported versions](https://devguide.python.org/versions/#supported-versions) of the python language (i.e., python >= 3.9(EOL: 2025-10)).
 
-This extension is also published on [Open VSX]("https://open-vsx.org/extension/eeyore/yapf") .
+This extension is also published on [Open VSX](https://open-vsx.org/extension/eeyore/yapf).
 
 
 ## Quick Start
