@@ -165,7 +165,7 @@
     "devDependencies": {
         "@types/fs-extra": "^11.0.4",
         "@types/vscode": "1.78.0",
-        "@types/glob": "^8.1.0",
+        "@types/glob": "^9.0.0",
         "@types/node": "16.x",
         "@typescript-eslint/eslint-plugin": "^8.38.0",
         "@typescript-eslint/parser": "^8.38.0",
