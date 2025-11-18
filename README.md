@@ -2,7 +2,7 @@
 
 A formatter extension with support for python files and notebook cell. Feel free to open an issue to tell me what feature else do you need since it's a preview version.  
 Note:  
-* This extension is supported for all [actively supported versions](https://devguide.python.org/versions/#supported-versions) of the python language (i.e., python >= 3.9(EOL: 2025-10)).
+* This extension is supported for all [actively supported versions](https://devguide.python.org/versions/#supported-versions) of the python language (i.e., python >= 3.10(EOL: 2026-10)).
 
 This extension is also published on [Open VSX](https://open-vsx.org/extension/eeyore/yapf).
 
@@ -37,8 +37,8 @@ pip install yapf
   }
 ```
 
-## Address crash for python3.8 or lower
-Use `yapf.interpreter` property to select a python interpreter that 3.9 or higher to run this tool by subprocess
+## Address crash for python3.9 or lower
+Use `yapf.interpreter` property to select a python interpreter that 3.10 or higher to run this tool by subprocess
 
 
 ## file mode & modifications mode
