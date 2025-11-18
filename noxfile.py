@@ -125,7 +125,7 @@ def setup(session: nox.Session) -> None:
 @nox.session()
 def tests(session: nox.Session) -> None:
     """Runs all the tests for the extension."""
-    session.install("-r", "--no-deps", "src/test/python_tests/requirements.txt")
+    session.install("--no-deps", "-r", "src/test/python_tests/requirements.txt")
     session.run("pytest", "src/test/python_tests")
 
 
