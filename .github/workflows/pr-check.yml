@@ -42,7 +42,7 @@ jobs:
 
       # This will install libraries to a target directory.
       - name: Install bundled python libraries
-        run: python -m nox --session setup
+        run: python -m nox --session install_package
         shell: bash
 
       # Now that the bundle is installed to target using python 3.8
