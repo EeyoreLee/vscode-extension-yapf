@@ -5,9 +5,6 @@ inputs:
     description: 'Version of Node to install'
     required: true
 
-env:
-  PYTHONIOENCODING: 'utf-8'
-
 runs:
   using: 'composite'
 
@@ -41,14 +38,20 @@ runs:
 
     - name: Upgrade pip
       run: python -m pip install -U pip
+      env:
+        PYTHONIOENCODING: 'utf-8'
       shell: bash
 
     - name: Install build pre-requisite
       run: python -m pip install wheel
+      env:
+        PYTHONIOENCODING: 'utf-8'
       shell: bash
 
     - name: Install nox
       run: python -m pip install nox
+      env:
+        PYTHONIOENCODING: 'utf-8'
       shell: bash
 
     - name: Run npm ci
@@ -57,4 +60,6 @@ runs:
 
     - name: Install bundled python packages
       run: python -m nox -s install_package
+      env:
+        PYTHONIOENCODING: 'utf-8'
       shell: bash
