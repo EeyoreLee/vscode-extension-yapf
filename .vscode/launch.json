@@ -47,7 +47,10 @@
             "name": "Debug Extension (hidden)",
             "type": "extensionHost",
             "request": "launch",
-            "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "${workspaceFolder}"
+            ],
             "outFiles": ["${workspaceFolder}/dist/**/*.js"],
             "env": {
                 "USE_DEBUGPY": "True"
