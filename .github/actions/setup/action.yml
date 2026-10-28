@@ -10,18 +10,18 @@ runs:
 
   steps:
     - name: Install Node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node_version }}
         cache: 'npm'
 
     - name: Use Python 3.11
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
         python-version: 3.11
 
     - name: Pip lib cache
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-build-vsix-${{ hashFiles('**/requirements.txt') }}
@@ -29,7 +29,7 @@ runs:
           ${{ runner.os }}-pip-build-vsix-
 
     - name: Pip tool cache
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-build-vsix-${{ hashFiles('**/requirements-tool.txt') }}
